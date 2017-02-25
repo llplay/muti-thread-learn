@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -23,7 +22,7 @@ public class Starter {
         LocalDateTime startTime = LocalDateTime.now();
 
         List<Thread> threads = new ArrayList<>();
-        LinkedBlockingQueue<Optional<String>> queue = new LinkedBlockingQueue<>();
+        LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
 
         FileUtil.clearFileContents(outputFile);
 
@@ -32,7 +31,9 @@ public class Starter {
 
         Consumer consumer = new Consumer(queue, outputFile);
         for(int i = 0; i < Consumer.consumerThreadCount; i++) {
-            threads.add(new Thread(consumer));
+            Thread consumerThread = new Thread(consumer);
+            producer.addConsumer(consumerThread);
+            threads.add(consumerThread);
         }
 
         threads.forEach(Thread::start);

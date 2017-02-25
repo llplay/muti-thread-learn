@@ -108,11 +108,12 @@ public class FileUtil {
     public String processLine(String line) throws IOException {
         int min = 1;
         int max = 100;
-        int randomMillisecconds = min + (int)(Math.random() * ((max - min) + 1));
+        int randomMilliseconds = min + (int)(Math.random() * ((max - min) + 1));
         try {
-            Thread.sleep(randomMillisecconds);
+            Thread.sleep(randomMilliseconds);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn(String.format("Thread %s was interrupted while processing lines", Thread.currentThread()));
+            Thread.currentThread().interrupt();
         }
         // readLineCount is not accurate in multi-thread mode
         readLineCount.incrementAndGet();

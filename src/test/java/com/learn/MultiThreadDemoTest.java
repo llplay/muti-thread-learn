@@ -1,5 +1,6 @@
 package com.learn;
 
+import com.learn.thread.Consumer;
 import com.learn.thread.SingletonConsumer;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,8 +51,14 @@ public class MultiThreadDemoTest {
     }
 
     @Test
-    public void simpleTest() {
-        logger.info(FileUtil.getResourceFile("test"));
+    public void simpleTest() throws InterruptedException {
+        LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+        Consumer consumer = new Consumer(queue, outputFile);
+        Thread consumerThread = new Thread(consumer);
+        consumerThread.start();
+        Thread.sleep(1000);
+        consumerThread.interrupt();
+        consumerThread.join();
     }
 
     @Test
