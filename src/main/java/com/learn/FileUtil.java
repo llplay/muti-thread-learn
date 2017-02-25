@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -16,7 +17,7 @@ public class FileUtil {
     private FileWriter fileWriter;
     private BufferedWriter bufferedWriter;
     private PrintWriter printWriter;
-    private int readLineCount;
+    private AtomicInteger readLineCount = new AtomicInteger();
 
     public static void clearFileContents(String filePath) {
         File file = new File(filePath);
@@ -114,8 +115,8 @@ public class FileUtil {
             e.printStackTrace();
         }
         // readLineCount is not accurate in multi-thread mode
-        readLineCount++;
-        logger.info(String.format("%d lines were read.", readLineCount));
+        readLineCount.incrementAndGet();
+        logger.info(String.format("%d lines were read.", readLineCount.get()));
         return line;
     }
 }
