@@ -56,10 +56,10 @@ public class MultiThreadDemoTest {
     @Test
     public void singletonConsumerTest() throws InterruptedException {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(100);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         Set<SingletonConsumer> set = new HashSet<>();
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             executorService.execute(
                 () -> set.add(SingletonConsumer.getSingletonConsumer())
             );

@@ -21,13 +21,9 @@ public class SingletonConsumer {
     public static SingletonConsumer getSingletonConsumer() {
         if(instance == null) {
             synchronized (SingletonConsumer.class) {
-                if (instance == null) {
-                    logger.debug("instance is null, trying to instantiate a new one");
-                    simulateconstructionTime();
-                    instance = new SingletonConsumer();
-                } else {
-                    logger.debug("instance is not null, return the already-instantiated one");
-                }
+                logger.debug("instance is null, trying to instantiate a new one");
+                simulateconstructionTime();
+                instance = new SingletonConsumer();
             }
         }
         return instance;
