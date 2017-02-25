@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
  */
 public class SingletonConsumer {
     private final static Logger logger = Logger.getLogger(XsiNilLoader.Single.class);
-    private static SingletonConsumer instance;
+    private static volatile SingletonConsumer instance;
     private SingletonConsumer(){}
 
     private static void simulateconstructionTime() {
@@ -21,9 +21,13 @@ public class SingletonConsumer {
     public static SingletonConsumer getSingletonConsumer() {
         if(instance == null) {
             synchronized (SingletonConsumer.class) {
-                logger.debug("instance is null, trying to instantiate a new one");
-                simulateconstructionTime();
-                instance = new SingletonConsumer();
+                if (instance == null) {
+                    logger.debug("instance is null, trying to instantiate a new one");
+                    simulateconstructionTime();
+                    instance = new SingletonConsumer();
+                } else {
+                    logger.debug("instance is not null, return the already-instantiated one");
+                }
             }
         }
         return instance;
